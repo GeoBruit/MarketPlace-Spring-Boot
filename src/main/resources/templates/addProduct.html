@@ -6,18 +6,53 @@
 </head>
 <body>
 <h2>Add Product</h2>
-<form th:action="@{'/add-product/' + ${userId}}" method="post" th:object="${product}">
+<form th:action="@{'/add-product/' + ${userId}}" method="post" th:object="${product}" enctype="multipart/form-data">
 
     <label for="productName">Product Name:</label>
-    <input type="text" id="productName" name="productName" th:field="*{name}" required value="*{name}"><br>
+    <input type="text" id="productName" name="productName" th:field="*{name}" required><br>
 
     <label for="productDescription">Product Description:</label>
-    <textarea id="productDescription" name="productDescription" th:field="*{description}" required value="*{description}"></textarea><br>
+    <textarea id="productDescription" name="productDescription" th:field="*{description}" required></textarea><br>
 
     <label for="productPrice">Product Price:</label>
-    <input type="text" id="productPrice" name="productPrice" th:field="*{price}" required value="*{description}"><br>
+    <input type="text" id="productPrice" name="productPrice" th:field="*{price}" required><br>
+
+    <label for="productImage">Product Image:</label>
+    <input type="file" id="productImage" name="productImage" accept="image/*"><br>
+
+    <label for="additionalImages">Additional Images:</label>
+    <input type="file" id="additionalImages" name="additionalImages" accept="image/*" multiple><br>
 
     <input type="submit" value="Add Product">
 </form>
 </body>
 </html>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Add Product</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>Add Product</h2>-->
+<!--<form th:action="@{'/add-product/' + ${userId}}" method="post" th:object="${product}" enctype="multipart/form-data">-->
+
+<!--    <label for="productName">Product Name:</label>-->
+<!--    <input type="text" id="productName" name="productName" th:field="*{name}" required value="*{name}"><br>-->
+
+<!--    <label for="productDescription">Product Description:</label>-->
+<!--    <textarea id="productDescription" name="productDescription" th:field="*{description}" required value="*{description}"></textarea><br>-->
+
+<!--    <label for="productPrice">Product Price:</label>-->
+<!--    <input type="text" id="productPrice" name="productPrice" th:field="*{price}" required value="*{price}"><br>-->
+
+<!--    <label for="productImage">Product Image:</label>-->
+<!--    <input type="file" id="productImage" name="productImage" accept="image/*"><br>-->
+
+<!--    <label for="additionalImages">Additional Images:</label>-->
+<!--    <input type="file" id="additionalImages" name="additionalImages" accept="image/*" multiple><br>-->
+
+<!--    <input type="submit" value="Add Product">-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->

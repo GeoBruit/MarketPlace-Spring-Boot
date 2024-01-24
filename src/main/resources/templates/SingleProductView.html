@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+</head>
+<body>
+
+<h2>Product Details</h2>
+
+<div th:if="${product}">
+    <h3 th:text="${product.name}"></h3>
+    <p th:text="${product.description}"></p>
+    <p th:text="${product.price}"></p>
+
+
+
+
+    <div th:each="image : ${product.images}">
+        <img th:src="@{'/' + ${image.imagePath}}" alt="Product Image" width="200"/>
+    </div>
+
+
+<!--    debug-->
+
+
+    <!--    test-->
+<!--    <img src="/productImage/a92aea09-c98d-4bef-b1b9-88a466648167_AA11CokQ.jpg" alt="Product Image">-->
+    <!-- Display product images -->
+<!--    <div th:each="image : ${product.images}">-->
+<!--        <img th:src="@{${image.imagePath}}" alt="Product Image" width="200"/>-->
+<!--        <p th:text="${image.imagePath}"></p> &lt;!&ndash; Add this line &ndash;&gt;-->
+<!--    </div>-->
+
+
+    <!-- Add more details as needed -->
+
+    <p><a th:href="@{'/home'}">Back to Product List</a></p>
+</div>
+<div th:unless="${product}">
+    <p>Product not found</p>
+</div>
+
+</body>
+</html>

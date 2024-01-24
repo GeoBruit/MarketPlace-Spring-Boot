@@ -31,20 +31,25 @@ public class SecurityConfiguration{
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
         http
 
                 .authorizeHttpRequests((requests) -> requests
+
                         .requestMatchers("/","/home", "/register","/js/**", "/css/**").permitAll()
+                        .requestMatchers("/static/**").permitAll()
                     //    .requestMatchers(HttpMethod.DELETE, "/delete/product/**").hasRole("USER") // this should allow us tp use delete requests
                         .requestMatchers("/list").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+
                 .formLogin((form) -> form
                         .loginPage("/login-page")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/list")
+                        .defaultSuccessUrl("/home")
                         .permitAll()
                 )
                 .logout((logout) -> logout

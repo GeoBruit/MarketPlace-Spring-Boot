@@ -25,10 +25,10 @@ public class AuthController {
      * Home page view (no auth required)
      * @return the home.html template
      */
-    @GetMapping("/home")
-    public String showHomePage(){
-        return "home";
-    }
+//    @GetMapping("/home")
+//    public String showHomePage(){
+//        return "home";
+//    }
 
     /**
      *  Shows the user registration form for the user

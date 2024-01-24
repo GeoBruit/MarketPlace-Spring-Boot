@@ -1,8 +1,10 @@
 package com.geobruit.campus.market.project.controller;
 
+import com.geobruit.campus.market.project.model.Image;
 import com.geobruit.campus.market.project.model.Product;
 import com.geobruit.campus.market.project.model.User;
 import com.geobruit.campus.market.project.repository.ProductRepository;
+import com.geobruit.campus.market.project.service.ImageService;
 import com.geobruit.campus.market.project.service.ProductService;
 import com.geobruit.campus.market.project.service.UserService;
 import jakarta.transaction.Transactional;
@@ -13,7 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -21,15 +25,19 @@ public class ProductController {
 
     ProductService productService;
     UserService userService;
+    ImageService imageService;
 
     public ProductController(){}
 
     @Autowired
-    public ProductController(ProductService theProductService, UserService theUserService){
+    public ProductController(ProductService theProductService, UserService theUserService, ImageService theImageService){
 
         this.productService = theProductService;
         this.userService = theUserService;
+        this.imageService = theImageService;
     }
+
+
     @GetMapping("/add-product")
     public String showAddProductForm(Model model) {
         // Get auth object
@@ -50,25 +58,32 @@ public class ProductController {
         model.addAttribute("userId", userId);
         return "addProduct";
     }
+
+
     @PostMapping("/add-product/{userId}")
-    public String saveProductForUser(@ModelAttribute Product product, @PathVariable Long userId){
-            product.setUser(userService.findUserById(userId));
-            productService.saveProduct(product);
+    public String saveProductForUser(@RequestParam("additionalImages") List<MultipartFile> additionalImages,
+                                     @ModelAttribute Product product,
+                                     @PathVariable Long userId) {
+
+        User user = userService.findUserById(userId);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        product.setUser(user);
+
+        try {
+            // Save the product with images
+            productService.saveProductWithImages(product, additionalImages);
+
             return "redirect:/my-products";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/error";
+        }
     }
 
-
-    //old way just keep ot in any case
-    //TODO check to  see if you still need it
-//    @GetMapping("/product/{userId}")
-//    public String productList(@PathVariable long userId, Model model){
-//
-//
-//        User tempUser = userService.findUserById(userId);
-//        List<Product> productList = tempUser.getProducts();
-//        model.addAttribute("products", productList);
-//        return "productsList";
-//    }
 
     @GetMapping("/my-products")
     public String showUserProductList(Model model){
@@ -102,5 +117,14 @@ public class ProductController {
 
             productService.deleteProductById(productId, authentication.getName());
             return "redirect:/my-products";
+    }
+
+    @GetMapping("/view/product/{productId}")
+    public String showSingleProduct(@PathVariable Long productId, Model model){
+
+        Product tempProduct = productService.getProductById(productId);
+        model.addAttribute("product", tempProduct);
+
+        return "singleProductView";
     }
 }
